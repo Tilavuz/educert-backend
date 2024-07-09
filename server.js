@@ -1,0 +1,33 @@
+const express = require('express')
+const cors = require('cors')
+const { connectDb } = require('./db/connectDb')
+const app = express()
+require('dotenv').config()
+app.use('/uploads', express.static('uploads'))
+
+app.use(express.json())
+app.use(cors())
+connectDb()
+
+
+
+// auth Router
+const authRouter = require('./routers/auth.router')
+app.use('/api', authRouter)
+
+// Filial Router
+const filialRouter = require('./routers/filial.router')
+app.use('/api', filialRouter)
+
+// Room Router
+const roomRouter = require('./routers/room.router')
+app.use('/api', roomRouter)
+
+// subject Router
+const subjectRouter = require('./routers/subject.router')
+app.use("/api", subjectRouter);
+
+const port = process.env.PORT || 3000
+app.listen(port, () => {
+    console.log(`${port} server is running`);
+})
