@@ -23,9 +23,17 @@ app.use('/api', filialRouter)
 const roomRouter = require('./routers/room.router')
 app.use('/api', roomRouter)
 
-// subject Router
+// Subject Router
 const subjectRouter = require('./routers/subject.router')
 app.use("/api", subjectRouter);
+
+// Teacher Router
+const teacherRouter = require('./routers/teacher.router')
+app.use("/api", teacherRouter);
+
+// Teacher Router
+const groupRouter = require('./routers/group.router')
+app.use("/api", groupRouter);
 
 const port = process.env.PORT || 3000
 app.listen(port, () => {
