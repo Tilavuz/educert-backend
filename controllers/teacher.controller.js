@@ -65,9 +65,7 @@ const removeTeacher = async (req, res) => {
         const { id } = req.params;
         const teacher = await Teacher.findByIdAndDelete(id);
 
-        if (!teacher) {
-          return res.status(404).json({ message: "Teacher topilmadi!" });
-        }
+        if (!teacher) throw new Error('Teacher topilmadi!')
 
         if (teacher.photo !== "default-image.jpg") {
           const photoPath = path.join(

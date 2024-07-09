@@ -35,6 +35,10 @@ app.use("/api", teacherRouter);
 const groupRouter = require('./routers/group.router')
 app.use("/api", groupRouter);
 
+// Teacher Router
+const userRouter = require('./routers/user.router')
+app.use("/api", userRouter);
+
 const port = process.env.PORT || 3000
 app.listen(port, () => {
     console.log(`${port} server is running`);
