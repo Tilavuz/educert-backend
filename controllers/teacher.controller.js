@@ -11,6 +11,16 @@ const getTeachers = async (req, res) => {
     }
 }
 
+const getTeachersOneFilial = async (req, res) => {
+    try {
+        const { id } = req.params
+        const teachers = await Teacher.find({ filial: { $in: [id] } });
+        res.json(teachers)
+    } catch (error) {
+        res.json({ message: error.message })
+    }
+}
+
 const createTeacher = async (req, res) => {
     try {
         const { auth, name, lastname, about, grade, filial } = req.body
@@ -82,4 +92,10 @@ const removeTeacher = async (req, res) => {
     }
 }
 
-module.exports = { getTeachers, createTeacher, changeTeacher, removeTeacher };
+module.exports = {
+  getTeachers,
+  createTeacher,
+  changeTeacher,
+  removeTeacher,
+  getTeachersOneFilial,
+};

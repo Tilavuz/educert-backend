@@ -10,12 +10,22 @@ const getGroups = async (req, res) => {
     }
 }
 
+const getGroupsOneFilial = async (req, res) => {
+    try {
+        const { id } = req.params
+        const groups = await Group.find({ filial: id })
+        res.json(groups)
+    } catch (error) {
+        res.json({ message: error.message })
+    }
+}
+
 const createGroup = async (req, res) => {
     try {
         const { teacher, title, subject, filial } = req.body
         const isHaveGroup = await Group.findOne({ filial, teacher, title, subject })
 
-        if(!teacher || !title || !!subject || !filial) throw new Error('Malumot to\'liq emas')
+        if(!teacher || !title || !subject || !filial) throw new Error('Malumot to\'liq emas')
         if(isHaveGroup) throw new Error('Bunday guruh mavjut!')
 
         let group = await Group.create({ teacher, title, subject, filial })
@@ -59,4 +69,10 @@ const removeGroup = async (req, res) => {
 }
 
 
-module.exports = { getGroups, createGroup, changeGroup, removeGroup };
+module.exports = {
+  getGroups,
+  createGroup,
+  changeGroup,
+  removeGroup,
+  getGroupsOneFilial,
+};

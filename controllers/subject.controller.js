@@ -11,12 +11,22 @@ const getSubjects = async (req, res) => {
   }
 };
 
+const getSubjectsOneFilial = async (req, res) => {
+  try {
+      const { id } = req.params
+      const subjects = await Subject.find({ filial: id })
+      res.json(subjects)
+  } catch (error) {
+    res.json({message: error.message})
+  }
+}
+
 const createSubject = async (req, res) => {
   try {
     const { title, filial } = req.body;
     const subject = await Subject.findOne({ title, filial });
 
-    if(!title || filial) throw new Error('Malumot to\'liq emas')
+    if(!title || !filial) throw new Error('Malumot to\'liq emas')
     if (subject) throw new Error("Bunday fan mavjut!");
 
     const photo = req.file ? req.file.filename : "default-image.png";
@@ -84,4 +94,10 @@ const changeSubject = async (req, res) => {
   }
 };
 
-module.exports = { createSubject, getSubjects, removeSubject, changeSubject };
+module.exports = {
+  createSubject,
+  getSubjects,
+  removeSubject,
+  changeSubject,
+  getSubjectsOneFilial,
+};
