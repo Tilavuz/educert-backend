@@ -43,6 +43,10 @@ app.use("/api", userRouter);
 const studentRouter = require('./routers/student.router')
 app.use("/api", studentRouter);
 
+// Time Router
+const timeRouter = require('./routers/time.router')
+app.use("/api", timeRouter);
+
 const port = process.env.PORT || 3000
 app.listen(port, () => {
     console.log(`${port} server is running`);
