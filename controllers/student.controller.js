@@ -5,7 +5,7 @@ const path = require("path");
 
 const getStudents = async (req, res) => {[]
     try {
-        const students = await Student.find().populate('filial').populate('subject').populate('group')
+        const students = await Student.find().populate('filial').populate('subjects').populate('groups')
         res.json(students)
     } catch (error) {
         console.log(error);
@@ -20,7 +20,7 @@ const createStudent = async (req, res) => {
         if(!auth || !name || !lastname || !filial || !subjects || !groups) throw new Error('Malumot to\'liq emas!')
 
         let student = await Student.create({ auth, name, lastname, filial, subjects, groups, photo })
-        student = await Student.findById(student._id).populate('filial').populate('subject').populate('group')
+        student = await Student.findById(student._id).populate('filial').populate('subjects').populate('groups')
         res.json({ message: 'Student yaratildi!', student })
     } catch (error) {
         console.log(error);
@@ -47,7 +47,7 @@ const changeStudent = async (req, res) => {
             student.photo = req.file.filename
         }
         await student.save()
-        student = await Student.findById(id).populate('filial').populate('subject').populate('group')
+        student = await Student.findById(id).populate('filial').populate('subjects').populate('groups')
         res.json({ message: 'Student o\'zgartirildi!', student })
     } catch (error) {
         console.log(error);
@@ -57,7 +57,7 @@ const changeStudent = async (req, res) => {
 const removeStudent = async (req, res) => {
     try {
         const { id } = req.params
-        const student = Student.findByIdAndDelete(id)
+        const student = await Student.findByIdAndDelete(id)
 
         if (!student) throw new Error("Student topilmadi!");
 
