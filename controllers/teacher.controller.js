@@ -7,7 +7,7 @@ const getTeachers = async (req, res) => {
         const teachers = await Teacher.find().populate('filial')
         res.json(teachers)
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 
@@ -22,7 +22,7 @@ const createTeacher = async (req, res) => {
         teacher = await Teacher.findById(teacher._id).populate('filial')
         res.json({ message: 'Teacher yaratildi!', teacher })
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 
@@ -56,7 +56,7 @@ const changeTeacher = async (req, res) => {
         teacher = await Teacher.findById(id).populate('filial')
         res.json({ message: "Malumot yangilandi!", teacher });
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 
@@ -78,7 +78,7 @@ const removeTeacher = async (req, res) => {
 
         res.json({ message: "Teacher va rasm o'chirildi!" });
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 

@@ -8,7 +8,7 @@ const getStudents = async (req, res) => {[]
         const students = await Student.find().populate('filial').populate('subjects').populate('groups')
         res.json(students)
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 
@@ -23,7 +23,7 @@ const createStudent = async (req, res) => {
         student = await Student.findById(student._id).populate('filial').populate('subjects').populate('groups')
         res.json({ message: 'Student yaratildi!', student })
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 
@@ -32,6 +32,8 @@ const changeStudent = async (req, res) => {
         const { id } = req.params
         const { name, lastname, filial, subjects, groups } = req.body
         let student = await Student.findById(id)
+
+        if(!student) throw new Error('Talaba topilmadi!')
 
         if(name) student.name = name
         if(lastname) student.lastname = lastname
@@ -50,7 +52,7 @@ const changeStudent = async (req, res) => {
         student = await Student.findById(id).populate('filial').populate('subjects').populate('groups')
         res.json({ message: 'Student o\'zgartirildi!', student })
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 
@@ -72,7 +74,7 @@ const removeStudent = async (req, res) => {
 
         res.json({ message: 'Student o\'chirib yuborildi!', student })
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 

@@ -7,7 +7,7 @@ const getUsers = async (req, res) => {
         const users = await User.find().populate('filial')
         res.json(users)
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 
@@ -20,7 +20,7 @@ const createUser = async (req, res) => {
         user = await User.findById(user._id).populate('filial')
         res.json({ message: "User yaratildi", user })
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 
@@ -49,7 +49,7 @@ const changeUser = async (req, res) => {
         res.json({ message: "User yangilandi!", user })
 
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 
@@ -67,7 +67,7 @@ const removeUser = async (req, res) => {
         res.json({ message: 'User o\'chirib yuborildi!' })
 
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 

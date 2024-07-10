@@ -6,7 +6,7 @@ const getGroups = async (req, res) => {
         const groups = await Group.find().populate('filial').populate('teacher').populate('subject')
         res.json(groups)
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 
@@ -15,13 +15,14 @@ const createGroup = async (req, res) => {
         const { teacher, title, subject, filial } = req.body
         const isHaveGroup = await Group.findOne({ filial, teacher, title, subject })
 
+        if(!teacher || !title || !!subject || !filial) throw new Error('Malumot to\'liq emas')
         if(isHaveGroup) throw new Error('Bunday guruh mavjut!')
 
         let group = await Group.create({ teacher, title, subject, filial })
         group = await Group.findById(group._id).populate('filial').populate('teacher').populate('subject')
         res.json({ message: 'Guruh yaratildi!', group })
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 
@@ -43,7 +44,7 @@ const changeGroup = async (req, res) => {
         group = await Group.findById(id).populate('filial').populate('teacher').populate('subject')
         res.json({ message: 'Malumot yangilandi!', group })
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 
@@ -53,7 +54,7 @@ const removeGroup = async (req, res) => {
         await Group.findByIdAndDelete(id)
         res.json({ message: 'Malumot o\'chirildi' })
     } catch (error) {
-        console.log(error);
+        res.json({ message: error.message })
     }
 }
 
