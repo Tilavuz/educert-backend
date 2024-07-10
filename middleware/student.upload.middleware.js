@@ -4,7 +4,7 @@ const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadPath = "uploads/teachers";
+    const uploadPath = "uploads/students";
     if (!fs.existsSync(uploadPath)) {
       fs.mkdirSync(uploadPath, { recursive: true });
     }
@@ -31,9 +31,9 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const teacherUpload = multer({
+const studentUpload = multer({
   storage: storage,
   fileFilter: fileFilter,
 }).single("photo");
 
-module.exports = teacherUpload;
+module.exports = studentUpload;
