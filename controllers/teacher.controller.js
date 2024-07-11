@@ -1,4 +1,5 @@
 const Teacher = require('../models/teacher.model')
+const WorkTime = require("../models/work-time.model");
 const deletePhoto = require('../helper/delete-photo')
 const path = require('path')
 
@@ -86,6 +87,7 @@ const removeTeacher = async (req, res) => {
           deletePhoto(photoPath);
         }
 
+        await WorkTime.deleteMany({ teacher: id });
         res.json({ message: "Teacher va rasm o'chirildi!" });
     } catch (error) {
         res.json({ message: error.message })

@@ -37,5 +37,4 @@ const teacherSchema = new Schema({
 });
 
 
-
 module.exports = model("Teacher", teacherSchema);
