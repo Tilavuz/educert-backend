@@ -19,16 +19,15 @@ const createSchdule = async (req, res) => {
   try {
     const { filial, time, teacher, room, group, subject } = req.body;
 
-    if (!filial || !time || !teacher || !room || !group || !subject)
-      throw new Error("Malumot yetarli emas!");
+    if (!filial || !time || !teacher || !room || !group || !subject) throw new Error("Malumot yetarli emas!");
 
-    let isHaveSchdule = await Schdule.find({ filial, time, teacher });
+    let isHaveSchdule = await Schdule.findOne({ filial, time, teacher });
     if (isHaveSchdule) throw new Error("Bu vaqtda ustoz bant!");
 
-    isHaveSchdule = await Schdule.find({ filial, time, room });
+    isHaveSchdule = await Schdule.findOne({ filial, time, room });
     if (isHaveSchdule) throw new Error("Bu vaqtda xona bant!");
 
-    isHaveSchdule = await Schdule.find({ filial, time, group });
+    isHaveSchdule = await Schdule.findOne({ filial, time, group });
     if (isHaveSchdule) throw new Error("Bu vaqtda guruh bant!");
 
     let schdule = await Schdule.create({
@@ -48,7 +47,7 @@ const createSchdule = async (req, res) => {
       .populate("subject");
     res.json({ message: "Malumot yaratildi!", schdule });
   } catch (error) {
-    res.json({ message: Error.message });
+    res.json({ message: error.message });
   }
 };
 
@@ -61,16 +60,16 @@ const changeSchdule = async (req, res) => {
 
     if(!schdule) throw new Error('Malumot mavjut emas!')
 
-    if (!filial || !time || !teacher || !room || !group)
+    if (!filial || !time || !teacher || !room || !group || !subject)
       throw new Error("Malumot yetarli emas!");
 
-    let isHaveSchdule = await Schdule.find({ filial, time, teacher });
+    let isHaveSchdule = await Schdule.findOne({ filial, time, teacher });
     if (isHaveSchdule) throw new Error("Bu vaqtda ustoz bant!");
 
-    isHaveSchdule = await Schdule.find({ filial, time, room });
+    isHaveSchdule = await Schdule.findOne({ filial, time, room });
     if (isHaveSchdule) throw new Error("Bu vaqtda xona bant!");
 
-    isHaveSchdule = await Schdule.find({ filial, time, group });
+    isHaveSchdule = await Schdule.findOne({ filial, time, group });
     if (isHaveSchdule) throw new Error("Bu vaqtda guruh bant!");
 
     if(subject) schdule.subject = subject

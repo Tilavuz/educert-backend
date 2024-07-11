@@ -9,6 +9,16 @@ const getRooms = async (req, res) => {
   }
 };
 
+const getFilialRooms = async (req, res) => {
+  try {
+    const { id } = req.params
+    const rooms = await Room.find({ filial: id }).populate("filial");
+    res.json(rooms);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
 const createRoom = async (req, res) => {
   try {
     const { filial, number } = req.body;
@@ -56,4 +66,10 @@ const removeRoom = async (req, res) => {
   }
 };
 
-module.exports = { getRooms, createRoom, changeRoom, removeRoom };
+module.exports = {
+  getRooms,
+  createRoom,
+  changeRoom,
+  removeRoom,
+  getFilialRooms,
+};

@@ -10,6 +10,16 @@ const getTimes = async (req, res) => {
     }
 }
 
+const getFilialTimes = async (req, res) => {
+  try {
+    const { id } = req.params
+    const times = await TimeModel.find({ filial: id }).populate("filial");
+    res.json(times);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
 const createTime = async (req, res) => {
     try {
         const { start, end, filial } = req.body
@@ -59,4 +69,10 @@ const removeTime = async (req, res) => {
 }
 
 
-module.exports = { getTimes, createTime, changeTime, removeTime };
+module.exports = {
+  getTimes,
+  createTime,
+  changeTime,
+  removeTime,
+  getFilialTimes,
+};
