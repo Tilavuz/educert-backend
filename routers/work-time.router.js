@@ -3,7 +3,7 @@ const { getWorkTimes, getWorkTimesOneTeacher, createWorkTime, changeWorkTime, re
 const  { isAuth } = require('../middleware/auth.middleware')
 
 router.get("/worktimes", isAuth, getWorkTimes);
-router.get("/worktimes/teacher", isAuth, getWorkTimesOneTeacher);
+router.get("/worktimes/teacher/:id", isAuth, getWorkTimesOneTeacher);
 router.post('/worktimes/add', isAuth, createWorkTime)
 router.put('/worktimes/update/:id', isAuth, changeWorkTime)
 router.delete("/worktimes/delete/:id", isAuth, removeWorkTime);

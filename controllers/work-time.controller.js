@@ -12,7 +12,7 @@ const getWorkTimes = async (req, res) => {
 const getWorkTimesOneTeacher = async (req, res) => {
     try {
         const { id } = req.params
-        const worktimes = await WorkTime.find({ teacher: id })
+        const worktimes = await WorkTime.find({ teacher: id }).populate('teacher')
         res.json(worktimes)
     } catch (error) {
         res.json({ message: error.message })
