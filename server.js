@@ -51,6 +51,10 @@ app.use("/api", timeRouter);
 const workTimeRouter = require('./routers/work-time.router')
 app.use("/api", workTimeRouter);
 
+// Schdule Router
+const schduleRouter = require('./routers/schdule.router')
+app.use("/api", schduleRouter);
+
 const port = process.env.PORT || 3000
 app.listen(port, () => {
     console.log(`${port} server is running`);
