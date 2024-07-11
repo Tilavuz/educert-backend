@@ -23,6 +23,9 @@ const createWorkTime = async (req, res) => {
   try {
     const { day, start, end, teacher } = req.body;
 
+    const isHaveWorktime = await WorkTime.findOne({ day, teacher })
+    if(isHaveWorktime) throw new Error('Bu kunga vaqt belgilangan!')
+
     if (!day || !start || !end || !teacher)
       throw new Error("Malumot yetarli emas!");
 
@@ -39,9 +42,14 @@ const changeWorkTime = async (req, res) => {
     try {
         const { id } = req.params
         const { day, start, end, teacher } = req.body
-        let worktime = await WorkTime.findById(id)
 
-        if(!worktime) throw new Error('Malumot mavjut emas!')
+        if(!teacher || !day) throw new Error('Maydonda ustoz va kun belgilanishi shart!')
+
+        let worktime = await WorkTime.findById(id)
+        if (!worktime) throw new Error("Malumot mavjut emas!");
+
+        const isHaveWorktime = await WorkTime.findOne({ day, teacher });
+        if (isHaveWorktime) throw new Error("Bu kunga vaqt belgilangan!");
 
         if(day) worktime.day = day
         if(start) worktime.start = start
@@ -49,7 +57,7 @@ const changeWorkTime = async (req, res) => {
         if(teacher) worktime.teacher = teacher
 
         await worktime.save()
-        worktime = await WorkTime.findById(id)
+        worktime = await WorkTime.findById(id).populate('teacher')
         res.json({ message: "Malumot yangilandi!", worktime })
 
     } catch (error) {
