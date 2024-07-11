@@ -21,3 +21,6 @@ const WorkTimeSchema = new Schema({
     default: null,
   },
 });
+
+
+module.exports = model('WorkTime', WorkTimeSchema)
