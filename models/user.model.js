@@ -4,6 +4,7 @@ const userSchema = new Schema({
   auth: {
     type: Schema.Types.ObjectId,
     ref: "Auth",
+    default: null,
     required: true,
   },
   name: {
@@ -16,12 +17,14 @@ const userSchema = new Schema({
   },
   photo: {
     type: String,
-    default: 'default-image.jpg'
+    default: "default-image.jpg",
   },
   filial: [
     {
       type: Schema.Types.ObjectId,
+      default: null,
       ref: "Filial",
+      required: true
     },
   ],
 });

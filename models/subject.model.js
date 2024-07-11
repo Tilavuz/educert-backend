@@ -8,11 +8,12 @@ const subjectSchema = new Schema({
   filial: {
     type: Schema.Types.ObjectId, // filial id aysi filialga tegishli
     ref: "Filial",
+    default: null,
     required: true,
   },
   photo: {
     type: String,
-    default: 'default-image.png'
+    default: "default-image.png",
   },
 });
 

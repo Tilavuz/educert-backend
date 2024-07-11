@@ -4,6 +4,7 @@ const timeSchema = new Schema({
   filial: {
     type: Schema.Types.ObjectId,
     ref: "Filial",
+    default: null,
     required: true,
   },
   start: {

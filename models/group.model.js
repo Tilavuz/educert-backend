@@ -5,6 +5,7 @@ const groupSchema = new Schema({
     type: Schema.Types.ObjectId, // teacherni idsi keladi
     ref: "Teacher",
     required: true,
+    default: null,
   },
   title: {
     type: String, // guruh nomi
@@ -14,11 +15,13 @@ const groupSchema = new Schema({
     type: Schema.Types.ObjectId, //qaysi fan
     ref: "Subject",
     required: true,
+    default: null,
   },
   filial: {
     type: Schema.Types.ObjectId, // filial id qaysi filialga tegishli
     ref: "Filial",
     required: true,
+    default: null,
   },
 });
 
