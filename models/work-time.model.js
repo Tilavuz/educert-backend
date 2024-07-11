@@ -5,6 +5,7 @@ const WorkTimeSchema = new Schema({
   day: {
     type: String,
     required: true,
+    enum: ['dushanba', 'seshanba', 'chorchanba', 'payshanba', 'juma', 'shanba', 'yakshanba']
   },
   start: {
     type: String,
