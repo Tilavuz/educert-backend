@@ -204,6 +204,15 @@ const changeSchdule = async (req, res) => {
     schdule.subject = subject;
 
     await schdule.save();
+
+    schdule = await Schdule.findById(schdule._id)
+      .populate("filial")
+      .populate("time")
+      .populate("teacher")
+      .populate("room")
+      .populate("group")
+      .populate("subject");
+
     res.json({ message: "Malumot yangilandi!", schdule });
   } catch (error) {
     res.json({ message: error.message });
