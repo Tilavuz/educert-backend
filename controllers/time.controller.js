@@ -22,12 +22,13 @@ const getFilialTimes = async (req, res) => {
 
 const createTime = async (req, res) => {
     try {
-        const { start, end, filial } = req.body
-        if(!start || !end || !filial) throw new Error('Malumot to\'liq emas!')
-        const isHaveTime = await TimeModel.findOne({ start, end, filial })
+        const { start, end, filial, day } = req.body
+        if(!start || !end || !filial || !day) throw new Error('Malumot to\'liq emas!')
+
+        const isHaveTime = await TimeModel.findOne({ start, end, filial, day })
         if(isHaveTime) throw new Error('Bunday malumot mavjut!')
 
-        let time = await TimeModel.create({ start, end, filial })
+        let time = await TimeModel.create({ start, end, filial, day })
 
         time = await TimeModel.findById(time._id).populate('filial')
 
@@ -40,15 +41,20 @@ const createTime = async (req, res) => {
 const changeTime = async (req, res) => {
     try {
         const { id } = req.params
-        const { start, end, filial } = req.body
+        const { start, end, filial, day } = req.body
+
+        if (!start || !end || !filial || !day) throw new Error("Malumot to'liq emas!");
 
         let time = await TimeModel.findById(id)
-
         if(!time) throw new Error('Malumot topilmadi!')
+
+        const isHaveTime = await TimeModel.findOne({ start, end, filial, day });
+        if (isHaveTime) throw new Error("Bunday malumot mavjut!");
 
         if(start) time.start = start
         if(end) time.end = end
         if(filial) time.filial = filial
+        if (day) time.day = day;
 
         await time.save()
         time = await TimeModel.findById(id).populate('filial')

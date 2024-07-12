@@ -15,6 +15,19 @@ const timeSchema = new Schema({
     type: String,
     required: true,
   },
+  day: {
+    type: String,
+    required: true,
+    enum: [
+      "dushanba",
+      "seshanba",
+      "chorchanba",
+      "payshanba",
+      "juma",
+      "shanba",
+      "yakshanba",
+    ],
+  },
 });
 
 module.exports = model("Time", timeSchema);
