@@ -5,7 +5,12 @@ const path = require("path");
 
 const getStudents = async (req, res) => {[]
     try {
-        const students = await Student.find().populate('filial').populate('subjects').populate('groups')
+        const students = await Student.find().populate("filial").populate({
+          path: "groups",
+          populate: {
+            path: 'subject'
+          }
+        });
         res.json(students)
     } catch (error) {
         res.json({ message: error.message })

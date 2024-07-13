@@ -5,17 +5,17 @@ const bcrypt = require("bcrypt");
 const login = async (req, res) => {
   try {
     const { phone, password } = req.body;
-    const auth = await Auth.findOne({ phone });
+    const auth = await Auth.findOne({ phone })
     
     if (!auth) throw new Error("Bunday admin mavjut emas!");
 
     const isMatch = await bcrypt.compare(password, auth.password);
-    if (!isMatch) throw new Error("Parol noto'g'ri");
+    if (!isMatch) throw new Error("Parolda xatolik bor!");
 
     const token = generateToken({ _id: auth._id });
-    res.json({ token });
+    res.json({ token, auth });
   } catch (error) {
-    res.json({ message: error.message });
+    res.json({ message: error.message })
   }
 };
 
@@ -37,7 +37,7 @@ const register = async (req, res) => {
 const getAuth = async (req, res) => {
   try {
     const { _id } = req.user;
-    const auth = await Auth.findById(_id);
+    const auth = await Auth.findById(_id).select('-password')
     res.json(auth);
   } catch (error) {
     res.json({ message: error.message });
