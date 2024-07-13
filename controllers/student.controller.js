@@ -3,7 +3,7 @@ const deletePhoto = require("../helper/delete-photo");
 const path = require("path");
 
 
-const getStudents = async (req, res) => {[]
+const getStudents = async (req, res) => {
     try {
         const students = await Student.find().populate("filial").populate({
           path: "groups",
@@ -11,6 +11,16 @@ const getStudents = async (req, res) => {[]
             path: 'subject'
           }
         });
+        res.json(students)
+    } catch (error) {
+        res.json({ message: error.message })
+    }
+}
+
+const getStudentsGroup = async (req, res) => {
+    try {
+        const { id } = req.params
+        const students = await Student.find({ groups: id })
         res.json(students)
     } catch (error) {
         res.json({ message: error.message })
@@ -84,4 +94,10 @@ const removeStudent = async (req, res) => {
 }
 
 
-module.exports = { getStudents, createStudent, changeStudent, removeStudent };
+module.exports = {
+  getStudents,
+  createStudent,
+  changeStudent,
+  removeStudent,
+  getStudentsGroup,
+};
