@@ -19,13 +19,13 @@ const getStudents = async (req, res) => {[]
 
 const createStudent = async (req, res) => {
     try {
-        const  { auth, name, lastname, filial, subjects, groups } = req.body
+        const  { auth, name, lastname, filial, groups } = req.body
         const photo = req.file ? req.file.filename : 'default-image.png'
 
-        if(!auth || !name || !lastname || !filial || !subjects || !groups) throw new Error('Malumot to\'liq emas!')
+        if(!auth || !name || !lastname || !filial || !groups) throw new Error('Malumot to\'liq emas!')
 
-        let student = await Student.create({ auth, name, lastname, filial, subjects, groups, photo })
-        student = await Student.findById(student._id).populate('filial').populate('subjects').populate('groups')
+        let student = await Student.create({ auth, name, lastname, filial, groups, photo })
+        student = await Student.findById(student._id).populate('filial').populate('groups')
         res.json({ message: 'Student yaratildi!', student })
     } catch (error) {
         res.json({ message: error.message })
@@ -35,7 +35,7 @@ const createStudent = async (req, res) => {
 const changeStudent = async (req, res) => {
     try {
         const { id } = req.params
-        const { name, lastname, filial, subjects, groups } = req.body
+        const { name, lastname, filial, groups } = req.body
         let student = await Student.findById(id)
 
         if(!student) throw new Error('Talaba topilmadi!')
@@ -54,7 +54,7 @@ const changeStudent = async (req, res) => {
             student.photo = req.file.filename
         }
         await student.save()
-        student = await Student.findById(id).populate('filial').populate('subjects').populate('groups')
+        student = await Student.findById(id).populate('filial').populate('groups')
         res.json({ message: 'Student o\'zgartirildi!', student })
     } catch (error) {
         res.json({ message: error.message })

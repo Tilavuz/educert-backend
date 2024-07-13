@@ -21,14 +21,6 @@ const studentSchema = new Schema({
     required: true,
     default: null,
   },
-  subjects: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Subject",
-      default: null,
-      required: true,
-    },
-  ],
   groups: [
     {
       type: Schema.Types.ObjectId,

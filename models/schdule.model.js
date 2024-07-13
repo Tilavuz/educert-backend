@@ -14,12 +14,6 @@ const schduleSchema = new Schema(
       default: null,
       required: true,
     },
-    teacher: {
-      type: Schema.Types.ObjectId,
-      ref: "Teacher",
-      default: null,
-      required: true,
-    },
     room: {
       type: Schema.Types.ObjectId,
       ref: "Room",
@@ -29,12 +23,6 @@ const schduleSchema = new Schema(
     group: {
       type: Schema.Types.ObjectId,
       ref: "Group",
-      default: null,
-      required: true,
-    },
-    subject: {
-      type: Schema.Types.ObjectId,
-      ref: "Subject",
       default: null,
       required: true,
     },

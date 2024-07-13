@@ -1,16 +1,19 @@
 const Schdule = require("../models/schdule.model");
 const WorkTime = require("../models/work-time.model");
-const TimeModel = require('../models/time.model')
+const TimeModel = require('../models/time.model');
+const Teacher = require('../models/teacher.model')
+const Group = require('../models/group.model')
 
 const getSchdules = async (req, res) => {
   try {
     const schdules = await Schdule.find()
       .populate("filial")
       .populate("time")
-      .populate("teacher")
       .populate("room")
-      .populate("group")
-      .populate("subject");
+      .populate({
+        path: "group",
+        populate: ['teacher', 'subject']
+      });
     res.json(schdules);
   } catch (error) {
     res.json({ message: error.message });
@@ -19,10 +22,11 @@ const getSchdules = async (req, res) => {
 
 const createSchdule = async (req, res) => {
   try {
-    const { filial, time, teacher, room, group, subject } = req.body;
+    const { filial, time, room, group } = req.body;
 
-    if (!filial || !time || !teacher || !room || !group || !subject)
-      throw new Error("Malumot yetarli emas!");
+    if (!filial || !time || !room || !group) throw new Error("Malumot yetarli emas!");
+
+    const { teacher } = await Group.findById(group)
 
     let isHaveSchdule = await Schdule.findOne({ filial, time, teacher });
     if (isHaveSchdule) throw new Error("Bu vaqtda ustoz bant!");
@@ -95,19 +99,18 @@ const createSchdule = async (req, res) => {
     let schdule = await Schdule.create({
       filial,
       time,
-      teacher,
       room,
       group,
-      subject,
     });
 
     schdule = await Schdule.findById(schdule._id)
       .populate("filial")
       .populate("time")
-      .populate("teacher")
       .populate("room")
-      .populate("group")
-      .populate("subject");
+      .populate({
+        path: "group",
+        populate: ['teacher', 'subject']
+      });
 
     res.json({ message: "Malumot yaratildi!", schdule });
   } catch (error) {
@@ -118,7 +121,7 @@ const createSchdule = async (req, res) => {
 const changeSchdule = async (req, res) => {
   try {
     const { id } = req.params;
-    const { filial, time, teacher, room, group, subject } = req.body;
+    const { filial, time, room, group } = req.body;
 
     let schdule = await Schdule.findById(id);
 
@@ -126,6 +129,9 @@ const changeSchdule = async (req, res) => {
 
     if (!filial || !time || !teacher || !room || !group || !subject)
       throw new Error("Malumot yetarli emas!");
+
+    const { teacher } = await Group.findById(group);
+
 
     let isHaveSchdule = await Schdule.findOne({ filial, time, teacher });
     if (isHaveSchdule && isHaveSchdule._id.toString() !== id)
@@ -198,20 +204,19 @@ const changeSchdule = async (req, res) => {
 
     schdule.filial = filial;
     schdule.time = time;
-    schdule.teacher = teacher;
     schdule.room = room;
     schdule.group = group;
-    schdule.subject = subject;
 
     await schdule.save();
 
     schdule = await Schdule.findById(schdule._id)
       .populate("filial")
       .populate("time")
-      .populate("teacher")
       .populate("room")
-      .populate("group")
-      .populate("subject");
+      .populate({
+        path: "group",
+        populate:['teacher', 'subject']
+      });
 
     res.json({ message: "Malumot yangilandi!", schdule });
   } catch (error) {
