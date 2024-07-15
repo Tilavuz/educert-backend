@@ -24,9 +24,9 @@ const userSchema = new Schema({
       type: Schema.Types.ObjectId,
       default: null,
       ref: "Filial",
-      required: true
+      required: true,
     },
-  ],
+  ]
 });
 
 module.exports = model("User", userSchema);

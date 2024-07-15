@@ -33,7 +33,7 @@ const teacherSchema = new Schema({
       ref: "Filial",
       required: true,
     },
-  ],
+  ]
 });
 
 

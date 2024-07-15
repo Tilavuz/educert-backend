@@ -22,7 +22,7 @@ const groupSchema = new Schema({
     ref: "Filial",
     required: true,
     default: null,
-  },
+  }
 });
 
 module.exports = model("Group", groupSchema);
