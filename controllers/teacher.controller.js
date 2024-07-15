@@ -3,10 +3,16 @@ const Auth = require("../models/auth.model");
 const WorkTime = require("../models/work-time.model");
 const deletePhoto = require("../helper/delete-photo");
 const path = require("path");
+const bcrypt = require('bcrypt')
 
 const getTeachers = async (req, res) => {
   try {
-    const teachers = await Teacher.find().populate("filial");
+    const teachers = await Teacher.find()
+      .populate({
+        path: "auth",
+        select: "-password",
+      })
+      .populate("filial");
     res.json(teachers);
   } catch (error) {
     res.json({ message: error.message });
@@ -16,7 +22,12 @@ const getTeachers = async (req, res) => {
 const getTeacher = async (req, res) => {
   try {
     const { id } = req.params;
-    const teacher = await Teacher.findById(id).populate("filial");
+    const teacher = await Teacher.findById(id)
+      .populate({
+        path: "auth",
+        select: "-password",
+      })
+      .populate("filial");
     res.json(teacher);
   } catch (error) {
     res.json({ message: error.message });
@@ -26,7 +37,12 @@ const getTeacher = async (req, res) => {
 const getTeachersOneFilial = async (req, res) => {
   try {
     const { id } = req.params;
-    const teachers = await Teacher.find({ filial: { $in: [id] } });
+    const teachers = await Teacher.find({ filial: { $in: [id] } })
+      .populate({
+        path: "auth",
+        select: "-password",
+      })
+      .populate("filial");
     res.json(teachers);
   } catch (error) {
     res.json({ message: error.message });
@@ -38,7 +54,15 @@ const createTeacher = async (req, res) => {
     const { name, lastname, about, grade, filial, phone, password } = req.body;
     const photo = req.file ? req.file.filename : "default-image.jpg";
 
-    if (!name || !lastname || !about || !grade || !filial || !phone || !password)
+    if (
+      !name ||
+      !lastname ||
+      !about ||
+      !grade ||
+      !filial ||
+      !phone ||
+      !password
+    )
       throw new Error("Malumot to'liq emas!");
 
     let hashPassword;
@@ -63,7 +87,10 @@ const createTeacher = async (req, res) => {
       photo,
     });
 
-    teacher = await Teacher.findById(teacher._id).populate("filial");
+    teacher = await Teacher.findById(teacher._id).populate("filial").populate({
+      path: "auth",
+      select: "-password",
+    });
     res.json({ message: "Teacher yaratildi!", teacher });
   } catch (error) {
     res.json({ message: error.message });
@@ -75,7 +102,7 @@ const changeTeacher = async (req, res) => {
     const { id } = req.params;
     const { name, lastname, about, grade, filial, password, phone } = req.body;
     let teacher = await Teacher.findById(id);
-    let auth = await Auth.findOne({ phone })
+    let auth = await Auth.findOne({ phone });
     if (!teacher) throw new Error("Malumot topilmadi!");
 
     if (name) teacher.name = name;
@@ -83,7 +110,7 @@ const changeTeacher = async (req, res) => {
     if (about) teacher.about = about;
     if (grade) teacher.grade = grade;
     if (filial) teacher.filial = filial;
-    if(phone) auth.phone = phone
+    if (phone) auth.phone = phone;
     if (password) auth.password = password;
 
     if (req.file) {
@@ -99,7 +126,10 @@ const changeTeacher = async (req, res) => {
     }
 
     await teacher.save();
-    teacher = await Teacher.findById(id).populate("filial");
+    teacher = await Teacher.findById(id).populate("filial").populate({
+      path: "auth",
+      select: "-password",
+    });
     res.json({ message: "Malumot yangilandi!", teacher });
   } catch (error) {
     res.json({ message: error.message });
