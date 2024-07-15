@@ -12,6 +12,16 @@ const getTeachers = async (req, res) => {
     }
 }
 
+const getTeacher = async (req, res) => {
+  try {
+    const { id } = req.params
+    const teacher = await Teacher.findById(id).populate("filial");
+    res.json(teacher);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
 const getTeachersOneFilial = async (req, res) => {
     try {
         const { id } = req.params
@@ -100,4 +110,5 @@ module.exports = {
   changeTeacher,
   removeTeacher,
   getTeachersOneFilial,
+  getTeacher,
 };
