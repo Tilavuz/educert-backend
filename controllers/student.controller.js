@@ -7,9 +7,7 @@ const getStudents = async (req, res) => {
     try {
         const students = await Student.find().populate("filial").populate({
           path: "groups",
-          populate: {
-            path: 'subject'
-          }
+          populate: ['subject', 'teacher']
         });
         res.json(students)
     } catch (error) {
@@ -21,6 +19,11 @@ const getStudentsGroup = async (req, res) => {
     try {
         const { id } = req.params
         const students = await Student.find({ groups: id })
+          .populate("filial")
+          .populate({
+            path: "groups",
+            populate: ["subject", "teacher"],
+          });
         res.json(students)
     } catch (error) {
         res.json({ message: error.message })
@@ -35,7 +38,12 @@ const createStudent = async (req, res) => {
         if(!auth || !name || !lastname || !filial || !groups) throw new Error('Malumot to\'liq emas!')
 
         let student = await Student.create({ auth, name, lastname, filial, groups, photo })
-        student = await Student.findById(student._id).populate('filial').populate('groups')
+        student = await Student.findById(student._id)
+          .populate("filial")
+          .populate({
+            path: "groups",
+            populate: ["subject", "teacher"],
+          });
         res.json({ message: 'Student yaratildi!', student })
     } catch (error) {
         res.json({ message: error.message })
@@ -53,7 +61,6 @@ const changeStudent = async (req, res) => {
         if(name) student.name = name
         if(lastname) student.lastname = lastname
         if(filial) student.filial = filial
-        if(subjects) student.subjects = subjects
         if(groups) student.groups = groups
 
         if(req.file) {
@@ -64,7 +71,12 @@ const changeStudent = async (req, res) => {
             student.photo = req.file.filename
         }
         await student.save()
-        student = await Student.findById(id).populate('filial').populate('groups')
+        student = await Student.findById(id)
+          .populate("filial")
+          .populate({
+            path: "groups",
+            populate: ["subject", "teacher"],
+          });
         res.json({ message: 'Student o\'zgartirildi!', student })
     } catch (error) {
         res.json({ message: error.message })
