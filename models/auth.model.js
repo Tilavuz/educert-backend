@@ -4,7 +4,8 @@ const bcrypt = require("bcrypt");
 const authSchema = new Schema({
     phone: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -13,7 +14,7 @@ const authSchema = new Schema({
     role: {
         type: String,
         required: true,
-        enum: ['admin', 'user', 'student', 'operator', 'accountant'],
+        enum: ['admin', 'user', 'student', 'operator', 'accountant', 'teacher'],
         default: 'user'
     }
 })

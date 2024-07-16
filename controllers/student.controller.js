@@ -68,6 +68,9 @@ const createStudent = async (req, res) => {
 
         if(!auth || !name || !lastname || !filial || !groups || !password || !phone) throw new Error('Malumot to\'liq emas!')
 
+          const haveuser = await Auth.findOne({phone})
+          if(haveuser) throw new Error('Telefon raqam bazada mavjut!')
+
           let hashPassword;
           if (password) {
             const salt = await bcrypt.genSalt(10);
@@ -112,7 +115,7 @@ const changeStudent = async (req, res) => {
 
         if(!student) throw new Error('Talaba topilmadi!')
 
-          let auth = await Auth.findOne({ phone })
+        let auth = await Auth.findOne({ phone })
 
         if(name) student.name = name
         if(lastname) student.lastname = lastname
