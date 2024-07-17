@@ -3,7 +3,7 @@ const Auth = require("../models/auth.model");
 const WorkTime = require("../models/work-time.model");
 const deletePhoto = require("../helper/delete-photo");
 const path = require("path");
-const bcrypt = require('bcrypt')
+const bcrypt = require("bcrypt");
 
 const getTeachers = async (req, res) => {
   try {
@@ -65,15 +65,9 @@ const createTeacher = async (req, res) => {
     )
       throw new Error("Malumot to'liq emas!");
 
-    let hashPassword;
-    if (password) {
-      const salt = await bcrypt.genSalt(10);
-      hashPassword = await bcrypt.hash(password, salt);
-    }
-
     let authschema = await Auth.create({
       phone,
-      password: hashPassword,
+      password,
       role: "teacher",
     });
 
@@ -142,6 +136,8 @@ const removeTeacher = async (req, res) => {
     const teacher = await Teacher.findByIdAndDelete(id);
 
     if (!teacher) throw new Error("Teacher topilmadi!");
+
+    await Auth.findByIdAndDelete(teacher.auth)
 
     if (teacher.photo !== "default-image.jpg") {
       const photoPath = path.join(
