@@ -64,7 +64,7 @@ const getStudent = async (req, res) => {
 const createStudent = async (req, res) => {
     try {
         const  { auth, name, lastname, filial, groups, password, phone } = req.body
-        const photo = req.file ? req.file.filename : 'default-image.png'
+        const photo = req.file ? req.file.filename : 'student-default-image.png'
 
         if(!auth || !name || !lastname || !filial || !groups || !password || !phone) throw new Error('Malumot to\'liq emas!')
 
@@ -126,8 +126,8 @@ const changeStudent = async (req, res) => {
 
 
         if(req.file) {
-            if(student.photo !== 'default-image.png') {
-                const oldPhotoPath = path.join(__dirname, '../uploads/students', student.photo)
+            if(student.photo !== 'student-default-image.png') {
+                const oldPhotoPath = path.join(__dirname, '../uploads', student.photo)
                 deletePhoto(oldPhotoPath)
             }
             student.photo = req.file.filename
@@ -156,10 +156,10 @@ const removeStudent = async (req, res) => {
 
         if (!student) throw new Error("Student topilmadi!");
 
-        if (student.photo !== "default-image.png") {
+        if (student.photo !== "student-default-image.png") {
           const photoPath = path.join(
             __dirname,
-            "../uploads/students",
+            "../uploads",
             student.photo
           );
           deletePhoto(photoPath);

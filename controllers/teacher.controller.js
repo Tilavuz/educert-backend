@@ -52,7 +52,7 @@ const getTeachersOneFilial = async (req, res) => {
 const createTeacher = async (req, res) => {
   try {
     const { name, lastname, about, grade, filial, phone, password } = req.body;
-    const photo = req.file ? req.file.filename : "default-image.jpg";
+    const photo = req.file ? req.file.filename : "teacher-default-image.jpg";
 
     if (
       !name ||
@@ -108,10 +108,10 @@ const changeTeacher = async (req, res) => {
     if (password) auth.password = password;
 
     if (req.file) {
-      if (teacher.photo !== "default-image.jpg") {
+      if (teacher.photo !== "teacher-default-image.jpg") {
         const oldPhotoPath = path.join(
           __dirname,
-          "../uploads/teachers",
+          "../uploads",
           teacher.photo
         );
         deletePhoto(oldPhotoPath);
@@ -139,10 +139,10 @@ const removeTeacher = async (req, res) => {
 
     await Auth.findByIdAndDelete(teacher.auth)
 
-    if (teacher.photo !== "default-image.jpg") {
+    if (teacher.photo !== "teacher-default-image.jpg") {
       const photoPath = path.join(
         __dirname,
-        "../uploads/teachers",
+        "../uploads",
         teacher.photo
       );
       deletePhoto(photoPath);

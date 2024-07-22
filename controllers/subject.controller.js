@@ -29,7 +29,7 @@ const createSubject = async (req, res) => {
     if(!title || !filial) throw new Error('Malumot to\'liq emas')
     if (subject) throw new Error("Bunday fan mavjut!");
 
-    const photo = req.file ? req.file.filename : "default-image.png";
+    const photo = req.file ? req.file.filename : "subject-default-image.png";
 
     let newSubject = await Subject.create({ title, filial, photo });
     newSubject = await Subject.findById(newSubject._id).populate("filial");
@@ -46,10 +46,10 @@ const removeSubject = async (req, res) => {
 
     if (!subject) throw new Error("Subject topilmadi!");
 
-    if (subject.photo !== "default-image.png") {
+    if (subject.photo !== "subject-default-image.png") {
       const photoPath = path.join(
         __dirname,
-        "../uploads/subjects",
+        "../uploads",
         subject.photo
       );
       deletePhoto(photoPath);
@@ -74,10 +74,10 @@ const changeSubject = async (req, res) => {
 
     
     if (req.file) {
-      if (subject.photo !== "default-image.png") {
+      if (subject.photo !== "subject-default-image.png") {
         const oldPhotoPath = path.join(
           __dirname,
-          "../uploads/subjects",
+          "../uploads",
           subject.photo
         );
         deletePhoto(oldPhotoPath);

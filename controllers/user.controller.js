@@ -18,7 +18,7 @@ const getUsers = async (req, res) => {
 const createUser = async (req, res) => {
   try {
     const { name, lastname, filial, phone, password } = req.body;
-    const photo = req.file ? req.file.filename : "default-image.jpg";
+    const photo = req.file ? req.file.filename : "user-default-image.jpg";
     if (!name || !lastname || !filial || !phone || !password)
       throw new Error("Malumot yetarli emas!");
 
@@ -62,10 +62,10 @@ const changeUser = async (req, res) => {
     }
 
     if (req.file) {
-      if (user.photo !== "default-image.jpg") {
+      if (user.photo !== "user-default-image.jpg") {
         const oldPhotoPath = path.join(
           __dirname,
-          "../uploads/users",
+          "../uploads",
           user.photo
         );
         deletePhoto(oldPhotoPath);
@@ -93,8 +93,8 @@ const removeUser = async (req, res) => {
 
     await Auth.findByIdAndDelete(user.auth)
 
-    if (user.photo !== "default-image.jpg") {
-      const oldImagePath = path.join(__dirname, "../uploads/users", user.photo);
+    if (user.photo !== "user-default-image.jpg") {
+      const oldImagePath = path.join(__dirname, "../uploads", user.photo);
       deletePhoto(oldImagePath);
     }
     res.json({ message: "User o'chirib yuborildi!" });
