@@ -55,6 +55,10 @@ app.use("/api", workTimeRouter);
 const schduleRouter = require('./routers/schdule.router')
 app.use("/api", schduleRouter);
 
+// teacher-task Router
+const teacherTaskRouter = require('./routers/teacher-task.router')
+app.use("/api", teacherTaskRouter);
+
 const port = process.env.PORT || 3000
 app.listen(port, () => {
     console.log(`${port} server is running`);

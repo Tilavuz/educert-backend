@@ -1,4 +1,5 @@
 const Group = require('../models/group.model')
+const Teacher = require('../models/teacher.model')
 
 
 const getGroups = async (req, res) => {
@@ -13,12 +14,26 @@ const getGroups = async (req, res) => {
 const getGroupsOneFilial = async (req, res) => {
     try {
         const { id } = req.params
+        const teacher = await Teacher.findOne({ auth: id })
         const groups = await Group.find({ filial: id }).populate('filial').populate('teacher').populate('subject')
         res.json(groups)
     } catch (error) {
         res.json({ message: error.message })
     }
 }
+
+const getGroupsOneTeacher = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const groups = await Group.find({ teacher: id })
+      .populate("filial")
+      .populate("teacher")
+      .populate("subject");
+    res.json(groups);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
 
 const createGroup = async (req, res) => {
     try {
@@ -75,4 +90,5 @@ module.exports = {
   changeGroup,
   removeGroup,
   getGroupsOneFilial,
+  getGroupsOneTeacher,
 };

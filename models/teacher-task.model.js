@@ -6,11 +6,16 @@ const teacherTaskSchema = new Schema({
     ref: "Teacher",
     required: true,
   },
+  group: {
+    type: Schema.Types.ObjectId,
+    ref: 'Group',
+    required: true
+  },
   title: {
     type: String,
     required: true,
   },
-  task: {
+  file: {
     type: String,
     default: null
   },
