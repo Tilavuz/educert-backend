@@ -1,20 +1,23 @@
 const deletePhoto = require('../helper/delete-photo')
 const TeacherTask = require('../models/teacher-task.model')
 const Group = require("../models/group.model");
+const Auth = require("../models/auth.model");
+const Teacher = require("../models/teacher.model");
 const path = require('path')
 
 
 const createTask = async (req, res) => {
     try {
-        const { title, group } = req.body
+        const { title } = req.body
+        const {id} = req.params
         const file = req.file.filename
-        const teacherId = req.user._id
+        const teacher = await Teacher.findOne({ auth: req.user._id });
         if(!title) throw new Error('Malumot to\'liq emas!')
         const task = await TeacherTask.create({
           title,
           file,
-          teacherId,
-          group,
+          teacherId: teacher._id,
+          group: id,
         });
         res.json({ message: 'Vazifa yuklandi!', task })
     } catch (error) {
@@ -40,12 +43,33 @@ const deleteTask = async (req, res) => {
 
 const getTasks = async (req, res) => {
     try {
-        const tasks = await TeacherTask.find()
+        const auth = await Auth.findById(req.user._id);
+        const teacher = await Teacher.findOne({ auth: auth._id })
+        const tasks = await TeacherTask.find({ teacherId: teacher._id }).populate('group')
         res.json(tasks)
     } catch (error) {
         res.json({ message: error.message })
     }
 }
+
+const getTasksGroup = async (req, res) => {
+  try {
+    const { id } = req.params
+    const auth = await Auth.findById(req.user._id);
+    const teacher = await Teacher.findOne({ auth: auth._id });
+    const tasks = await TeacherTask.find({
+      teacherId: teacher._id,
+      group: id,
+    }).populate({
+      path: "group",
+      populate: 'subject'
+    });
+    res.json(tasks);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
 
 const getTeacherGroup = async (req, res) => {
     try {
@@ -57,4 +81,10 @@ const getTeacherGroup = async (req, res) => {
 }
 
 
-module.exports = { createTask, deleteTask, getTasks, getTeacherGroup };
+module.exports = {
+  createTask,
+  deleteTask,
+  getTasks,
+  getTeacherGroup,
+  getTasksGroup,
+};
