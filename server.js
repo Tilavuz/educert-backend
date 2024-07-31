@@ -59,6 +59,14 @@ app.use("/api", schduleRouter);
 const teacherTaskRouter = require('./routers/teacher-task.router')
 app.use("/api", teacherTaskRouter);
 
+// departments Router
+const departmentRouter = require('./routers/department.router')
+app.use("/api", departmentRouter);
+
+// themes Router
+const themeRouter = require('./routers/theme.router')
+app.use("/api", themeRouter);
+
 const port = process.env.PORT || 3000
 app.listen(port, () => {
     console.log(`${port} server is running`);

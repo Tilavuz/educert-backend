@@ -8,13 +8,13 @@ const path = require('path')
 
 const createTask = async (req, res) => {
     try {
-        const { title } = req.body
+        const { themeId } = req.body
         const {id} = req.params
         const file = req.file.filename
         const teacher = await Teacher.findOne({ auth: req.user._id });
-        if(!title) throw new Error('Malumot to\'liq emas!')
+        if(!themeId) throw new Error('Malumot to\'liq emas!')
         const task = await TeacherTask.create({
-          title,
+          themeId,
           file,
           teacherId: teacher._id,
           group: id,
@@ -45,7 +45,7 @@ const getTasks = async (req, res) => {
     try {
         const auth = await Auth.findById(req.user._id);
         const teacher = await Teacher.findOne({ auth: auth._id })
-        const tasks = await TeacherTask.find({ teacherId: teacher._id }).populate('group')
+        const tasks = await TeacherTask.find({ teacherId: teacher._id }).populate('group').populate('themeId')
         res.json(tasks)
     } catch (error) {
         res.json({ message: error.message })
@@ -63,7 +63,7 @@ const getTasksGroup = async (req, res) => {
     }).populate({
       path: "group",
       populate: 'subject'
-    });
+    }).populate('themeId')
     res.json(tasks);
   } catch (error) {
     res.json({ message: error.message });

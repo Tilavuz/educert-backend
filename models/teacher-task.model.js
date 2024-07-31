@@ -8,16 +8,17 @@ const teacherTaskSchema = new Schema({
   },
   group: {
     type: Schema.Types.ObjectId,
-    ref: 'Group',
-    required: true
+    ref: "Group",
+    required: true,
   },
-  title: {
-    type: String,
+  themeId: {
+    type: Schema.Types.ObjectId,
+    ref: "Theme",
     required: true,
   },
   file: {
     type: String,
-    default: null
+    default: null,
   },
 });
 
