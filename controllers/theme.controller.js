@@ -35,19 +35,19 @@ const deleteTheme = async (req, res) => {
 
 const changeTheme = async (req, res) => {
   try {
-    const { id } = req.params
+    const { id } = req.params;
     const { subjectId, departmentId, title } = req.body;
-    const theme = await Theme.findById(id)
+    const theme = await Theme.findById(id);
 
-    if(!theme) throw new Error('Malumot topilmadi!')
+    if (!theme) throw new Error("Malumot topilmadi!");
 
-    if(subjectId) theme.subjectId = subjectId
-    if(departmentId) theme.departmentId = departmentId
+    if (subjectId) theme.subjectId = subjectId;
+    if (departmentId) theme.departmentId = departmentId;
     if (title) theme.title = title;
 
-    await theme.save()
+    await theme.save();
 
-    res.json({ message: 'Malumot yangilandi!', theme })
+    res.json({ message: "Malumot yangilandi!", theme });
   } catch (error) {
     res.json({ message: error.message });
   }
