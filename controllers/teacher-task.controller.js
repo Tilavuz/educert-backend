@@ -60,10 +60,15 @@ const getTasksGroup = async (req, res) => {
     const tasks = await TeacherTask.find({
       teacherId: teacher._id,
       group: id,
-    }).populate({
-      path: "group",
-      populate: 'subject'
-    }).populate('themeId')
+    })
+      .populate({
+        path: "group",
+        populate: "subject",
+      })
+      .populate({
+        path: "themeId",
+        populate: 'departmentId'
+      });
     res.json(tasks);
   } catch (error) {
     res.json({ message: error.message });

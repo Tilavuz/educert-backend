@@ -1,9 +1,21 @@
 const Theme = require("../models/theme.model");
+const Group = require("../models/group.model");
 
 const getThemes = async (req, res) => {
   try {
     const { id } = req.params;
     const themes = await Theme.find({ departmentId: id });
+    res.json(themes);
+  } catch (error) {
+    res.json({ message: error.message });
+  }
+};
+
+const getGroupThemes = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const group = await Group.findById(id)
+    const themes = await Theme.find({ subjectId: group.subject }).populate('departmentId')
     res.json(themes);
   } catch (error) {
     res.json({ message: error.message });
@@ -53,4 +65,10 @@ const changeTheme = async (req, res) => {
   }
 };
 
-module.exports = { getThemes, createTheme, deleteTheme, changeTheme };
+module.exports = {
+  getThemes,
+  createTheme,
+  deleteTheme,
+  changeTheme,
+  getGroupThemes,
+};
